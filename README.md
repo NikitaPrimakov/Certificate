@@ -10,7 +10,7 @@
 
    1.4. [Additional settings for Gitlab](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#additional-settings-for-gitlab "Additional settings for Gitlab")
 
-3. [Conclusion](#Conclusion)
+3. [Conclusion](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#conclusion "Conclusion")
 
 # ___SSL-certificate___
 
