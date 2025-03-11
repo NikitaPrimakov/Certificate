@@ -2,11 +2,11 @@
 
 1. [SSL-certificate](#основная-часть)
 
-   1. [What is an SSL-certificate?](#подраздел-1)
+   1.1. [What is an SSL-certificate?](#подраздел-1)
 
-   2. [How do SSL-certificates work?](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#how-do-ssl-certificates-work "How do SSL-certificates work?")
+   1.2. [How do SSL-certificates work?](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#how-do-ssl-certificates-work "How do SSL-certificates work?")
 
-   3. [Certificate issue](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#certificate-issue "Certificate issue")
+   1.3. [Certificate issue](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#certificate-issue "Certificate issue")
 
 3. [Conclusion](#Conclusion)
 
