@@ -185,5 +185,51 @@ sudo update-ca-certificates
 
 ## Additional settings for Gitlab
 
-___```Configure port 443 for Nginx in GitLab. Here are the necessary changes:```___
+Configure port 443 for Nginx in GitLab. Here are the necessary changes.
 
+___```1. Editing the GitLab configuration:```___
+
+```
+sudo nano /etc/gitlab/gitlab.rb
+
+# External url
+
+external_url 'https://git01.local'
+
+# Configure Nginx
+
+nginx['listen_port'] = 443
+nginx['listen_https'] = true
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/git01.local.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git01.local.key"
+
+# Disabling HTTP (optional)
+
+nginx['redirect_http_to_https'] = true
+
+```
+
+___```2. Checking and opening the port in the firewall:```___
+
+```
+# For ufw
+
+sudo ufw allow 443/tcp
+
+# For ipables 
+
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+```
+
+___```3. Applying Settings:```___
+
+```
+# Re-creating the configuration
+
+sudo gitlab-ctl reconfigure
+
+# Restart Nginx
+
+sudo gitlab-ctl restart nginx
+```
