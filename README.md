@@ -8,6 +8,8 @@
 
    1.3. [Certificate issue](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#certificate-issue "Certificate issue")
 
+   1.4. [Additional settings for Gitlab](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#additional-settings-for-gitlab "Additional settings for Gitlab")
+
 3. [Conclusion](#Conclusion)
 
 # ___SSL-certificate___
