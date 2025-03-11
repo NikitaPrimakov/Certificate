@@ -74,3 +74,29 @@ After restarting the system, I will create a folder where I will issue the certi
 
     openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt -subj "/C=RU/ST=Moscow/L=Moscow/O=MyOrganization/OU=IT/CN=My Root CA" 
     ```
+
+3. Creating a configuration file for a host certificate:
+    ```
+    cat > gitlab.conf << EOF
+    [req]
+    default_bits = 2048
+    prompt = no
+    default_md = sha256
+    distinguished_name = dn
+    req_extensions = req_ext
+
+    [dn]
+    C=RU
+    ST=Moscow
+    L=Moscow
+    O=MyOrganization
+    OU=IT
+    CN=git01.local
+
+    [req_ext]
+    subjectAltName = @alt_names
+
+    [alt_names]
+    DNS.1 = git01.local
+    EOF
+    ```
