@@ -44,119 +44,125 @@ Before we issue a certificate for our server, we will need to make changes to th
 
 <u>Checklist of completed commands:</u>
 
-1.  ```
-    nano /etc/hosts
-    ```
+___```1. Configure hosts - file```___  
+```
+nano /etc/hosts
+```
 
 Let's perform the change as follows:
 
-2.  ```
-    127.0.0.1 git01.local git01
-    ```
+___```2. Add hostname```___
+```
+127.0.0.1 git01.local git01
+```
+
 Save the file and restart the system.
 
 After restarting the system, I will create a folder where I will issue the certificate using the ```OpenSSL utility```.
 
 <u>Checklist of completed commands:</u>
 
-1. Creating a directory for certificates:
-     ```
-    mkdir -p ~/ssl/gitlab
-    cd ~/ssl/gitlab
-    ```
-2. Creating a root key and certificate:
-    ```
-    # Generating a private key for the root CA
+___```1. Creating a directory for certificates:```___
 
-    openssl genrsa -out rootCA.key 4096
+```
+mkdir -p ~/ssl/gitlab
+cd ~/ssl/gitlab
+```
 
-    # Creating a root certificate
+___```2. Creating a root key and certificate:```___
 
-    openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt -subj "/C=RU/ST=Moscow/L=Moscow/O=MyOrganization/OU=IT/CN=My Root CA" 
-    ```
+```
+# Generating a private key for the root CA
 
-3. Creating a configuration file for a host certificate:
-    ```
-    cat > gitlab.conf << EOF
-    [req]
-    default_bits = 2048
-    prompt = no
-    default_md = sha256
-    distinguished_name = dn
-    req_extensions = req_ext
+openssl genrsa -out rootCA.key 4096
 
-    [dn]
-    C=RU
-    ST=Moscow
-    L=Moscow
-    O=MyOrganization
-    OU=IT
-    CN=git01.local
+# Creating a root certificate
 
-    [req_ext]
-    subjectAltName = @alt_names
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt -subj "/C=RU/ST=Moscow/L=Moscow/O=MyOrganization/OU=IT/CN=My Root CA" 
+```
 
-    [alt_names]
-    DNS.1 = git01.local
-    EOF
-    ```
+___```3. Creating a configuration file for a host certificate:```___
+ 
+```
+cat > gitlab.conf << EOF
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+req_extensions = req_ext
 
-4. Creating a key and CSR for the host:
+[dn]
+C=RU
+ST=Moscow
+L=Moscow
+O=MyOrganization
+OU=IT
+CN=git01.local
 
-    ```
-    # Generating a private key for a host
+[req_ext]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = git01.local
+EOF
+```
+
+___```4. Creating a key and CSR for the host:```___
+
+```
+# Generating a private key for a host
     
-    openssl genrsa -out gitlab.key 2048
+openssl genrsa -out gitlab.key 2048
 
-    # Creating a CSR (Certificate Signing Request)
+# Creating a CSR (Certificate Signing Request)
     
-    openssl req -new -key gitlab.key -out gitlab.csr -config gitlab.conf
-    ```
+openssl req -new -key gitlab.key -out gitlab.csr -config gitlab.conf
+```
 
-What is CSR? ```A certificate signing request (CSR)``` is one of the first steps towards getting your own SSL/TLS certificate. Generated on the same server you plan to install the certificate on, the CSR contains information (e.g. common name, organization, country) the Certificate Authority (CA) will use to create your certificate.
+What is CSR? ___A certificate signing request (CSR)___ is one of the first steps towards getting your own SSL/TLS certificate. Generated on the same server you plan to install the certificate on, the CSR contains information (e.g. common name, organization, country) the Certificate Authority (CA) will use to create your certificate.
 
-5. Creating a configuration for signing:
+___```5. Creating a configuration for signing:```___
 
-    ```
-    cat > gitlab.ext << EOF
-    authorityKeyIdentifier=keyid,issuer
-    basicConstraints=CA:FALSE
-    keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
-    subjectAltName = @alt_names
+```
+cat > gitlab.ext << EOF
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
 
-    [alt_names]
-    DNS.1 = git01.local
-    DNS.2 = git01
-    EOF
-    ```
+[alt_names]
+DNS.1 = git01.local
+DNS.2 = git01
+EOF
+```
 
-6. Signing the host certificate with the root CA:
+___```6. Signing the host certificate with the root CA:```___
 
-    ```
-    openssl x509 -req -in gitlab.csr -CA rootCA.crt -CAkey rootCA.key \
-    -CAcreateserial -out gitlab.crt -days 365 -sha256 \
-    -extfile gitlab.ext
-    ```
+```
+openssl x509 -req -in gitlab.csr -CA rootCA.crt -CAkey rootCA.key \
+-CAcreateserial -out gitlab.crt -days 365 -sha256 \
+-extfile gitlab.ext
+```
 
-7. Installing certificates for GitLab:
+___```7. Installing certificates for GitLab:```___
 
-    ```
-    sudo mkdir -p /etc/gitlab/ssl
-    sudo cp gitlab.crt /etc/gitlab/ssl/git01.local.crt
-    sudo cp gitlab.key /etc/gitlab/ssl/git01.local.key
-    sudo chmod 600 /etc/gitlab/ssl/git01.local.key
-    ```
+```
+sudo mkdir -p /etc/gitlab/ssl
+sudo cp gitlab.crt /etc/gitlab/ssl/git01.local.crt
+sudo cp gitlab.key /etc/gitlab/ssl/git01.local.key
+sudo chmod 600 /etc/gitlab/ssl/git01.local.key
+```
 
-8. Configuring GitLab to use SSL:
+___```8. Configuring GitLab to use SSL:```___
 
-    ```
-    sudo nano /etc/gitlab/gitlab.rb
+```
+sudo nano /etc/gitlab/gitlab.rb
 
-    external_url 'https://git01.local'
-    nginx['ssl_certificate'] = "/etc/gitlab/ssl/git01.local.crt"
-    nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git01.local.key
-
-    ```
+external_url 'https://git01.local'
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/git01.local.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git01.local.key
+```
 
 ___```Important notes:```___
 
@@ -173,3 +179,9 @@ sudo cp rootCA.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 
 ```
+
+
+## Additional settings for Gitlab
+
+___```Configure port 443 for Nginx in GitLab. Here are the necessary changes:```___
+
