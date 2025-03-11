@@ -1,5 +1,5 @@
 # ___Content___
-    1. [What is an SSL certificate?](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#what-is-an-ssl-certificate "What is an SSL certificate?")
+    1. [Skillbox Media](https://skillbox.ru/media/ "Всплывающая подсказка") с подсказкой
 # ___SSL-sertificate___
 
 ## ___What is an SSL certificate?___
