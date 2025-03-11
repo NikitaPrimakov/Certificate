@@ -165,9 +165,11 @@ What is CSR? ```A certificate signing request (CSR)``` is one of the first steps
 3. Make sure that the DNS name git01.local resolves to the correct IP address (via DNS or /etc/hosts)
 4. The validity period of the host certificate is 365 days, the root certificate is 3650 days.
 
-9. To add the root certificate to the trusted ones on Linux:
+___To add the root certificate to the trusted ones on Linux:___
 
-    ``` 
-    sudo cp rootCA.crt /usr/local/share/ca-certificates/
-    sudo update-ca-certificates
-    ```
+```
+
+sudo cp rootCA.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+
+```
