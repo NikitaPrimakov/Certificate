@@ -1,8 +1,18 @@
 # ___Content___
-    1. [Skillbox Media](https://skillbox.ru/media/ "Всплывающая подсказка") с подсказкой
-# ___SSL-sertificate___
 
-## ___What is an SSL certificate?___
+1. [SSL-certificate](#основная-часть)
+
+   1. [What is an SSL-certificate?](#подраздел-1)
+
+   2. [How do SSL-certificates work?](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#how-do-ssl-certificates-work "How do SSL-certificates work?")
+
+   3. [Certificate issue](https://github.com/NikitaPrimakov/Certificate?tab=readme-ov-file#certificate-issue "Certificate issue")
+
+3. [Conclusion](#Conclusion)
+
+# ___SSL-certificate___
+
+## ___What is an SSL-certificate?___
 
 ```An SSL certificate``` is a digital certificate that authenticates a website and allows you to use an encrypted connection. The abbreviation SSL stands for Secure Sockets Layer, a security protocol that creates an encrypted connection between a web server and a web browser.
 
@@ -12,7 +22,7 @@ SSL ensures the security of Internet connections and prevents intruders from rea
 
 Since the SSL protocol was created about 25 years ago, it has been available in several versions. When using each of these versions, there were security issues at some point. Then there was an updated renamed version of the protocol – TLS (Transport Layer Security), which is still in use. However, the abbreviation SSL has stuck, so the new version of the protocol is still often referred to by the old name.
 
-## ___How do SSL certificates work?___
+## ___How do SSL-certificates work?___
 
 Using SSL ensures that data transmitted between users and websites or between two systems cannot be read by third parties or systems. SSL uses algorithms to encrypt the transmitted data, which prevents attackers from reading it when it is transmitted over an encrypted connection. This data includes potentially sensitive information such as names, addresses, credit card numbers, and other financial data.
 
