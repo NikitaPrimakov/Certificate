@@ -233,3 +233,7 @@ sudo gitlab-ctl reconfigure
 
 sudo gitlab-ctl restart nginx
 ```
+
+# ___Conclusion___
+
+This example shows how to create a root certificate and sign the certificate intended for our GitLab server.
