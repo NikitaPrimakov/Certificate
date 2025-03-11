@@ -100,3 +100,74 @@ After restarting the system, I will create a folder where I will issue the certi
     DNS.1 = git01.local
     EOF
     ```
+
+4. Creating a key and CSR for the host:
+
+    ```
+    # Generating a private key for a host
+    
+    openssl genrsa -out gitlab.key 2048
+
+    # Creating a CSR (Certificate Signing Request)
+    
+    openssl req -new -key gitlab.key -out gitlab.csr -config gitlab.conf
+    ```
+
+What is CSR? ```A certificate signing request (CSR)``` is one of the first steps towards getting your own SSL/TLS certificate. Generated on the same server you plan to install the certificate on, the CSR contains information (e.g. common name, organization, country) the Certificate Authority (CA) will use to create your certificate.
+
+5. Creating a configuration for signing:
+
+    ```
+    cat > gitlab.ext << EOF
+    authorityKeyIdentifier=keyid,issuer
+    basicConstraints=CA:FALSE
+    keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+    subjectAltName = @alt_names
+
+    [alt_names]
+    DNS.1 = git01.local
+    DNS.2 = git01
+    EOF
+    ```
+
+6. Signing the host certificate with the root CA:
+
+    ```
+    openssl x509 -req -in gitlab.csr -CA rootCA.crt -CAkey rootCA.key \
+    -CAcreateserial -out gitlab.crt -days 365 -sha256 \
+    -extfile gitlab.ext
+    ```
+
+7. Installing certificates for GitLab:
+
+    ```
+    sudo mkdir -p /etc/gitlab/ssl
+    sudo cp gitlab.crt /etc/gitlab/ssl/git01.local.crt
+    sudo cp gitlab.key /etc/gitlab/ssl/git01.local.key
+    sudo chmod 600 /etc/gitlab/ssl/git01.local.key
+    ```
+
+8. Configuring GitLab to use SSL:
+
+    ```
+    sudo nano /etc/gitlab/gitlab.rb
+
+    external_url 'https://git01.local'
+    nginx['ssl_certificate'] = "/etc/gitlab/ssl/git01.local.crt"
+    nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git01.local.key
+
+    ```
+
+<u>```Important notes:```</u>
+
+1. Save RootCA.key and RootCA.crt in a safe place. 
+2. Add RootCA.crt to the trusted root certificate authorities on the client computers.
+3. Make sure that the DNS name git01.local resolves to the correct IP address (via DNS or /etc/hosts)
+4. The validity period of the host certificate is 365 days, the root certificate is 3650 days.
+
+To add the root certificate to the trusted ones on Linux:
+
+    ```
+    sudo cp rootCA.crt /usr/local/share/ca-certificates/
+    sudo update-ca-certificates
+    ```
