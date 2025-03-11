@@ -158,14 +158,14 @@ What is CSR? ```A certificate signing request (CSR)``` is one of the first steps
 
     ```
 
-<u>```Important notes:```</u>
+___```Important notes:```___
 
 1. Save RootCA.key and RootCA.crt in a safe place. 
 2. Add RootCA.crt to the trusted root certificate authorities on the client computers.
 3. Make sure that the DNS name git01.local resolves to the correct IP address (via DNS or /etc/hosts)
 4. The validity period of the host certificate is 365 days, the root certificate is 3650 days.
 
-___To add the root certificate to the trusted ones on Linux:___
+___```To add the root certificate to the trusted ones on Linux:```___
 
 ```
 
